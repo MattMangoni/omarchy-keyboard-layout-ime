@@ -24,6 +24,22 @@ EN (us intl) → IT → JA (Mozc) → EN → …
 
 ## Install
 
+One command, run from a terminal (it may ask for your password):
+
+```bash
+git clone https://github.com/MattMangoni/omarchy-keyboard-layout-ime \
+  ~/.config/omarchy/plugins/matteo.keyboard-layout \
+  && bash ~/.config/omarchy/plugins/matteo.keyboard-layout/install.sh
+```
+
+The script is idempotent — re-run it any time; it skips what is already
+done. It installs `fcitx5-mozc`, adds Mozc to the fcitx5 profile,
+registers the widget on the bar, and sets the Chromium IME flags. It does
+not touch your Hyprland layout list; it only prints advice when a single
+layout would keep the widget hidden.
+
+## Manual install
+
 1. Install the Mozc engine:
 
    ```bash
