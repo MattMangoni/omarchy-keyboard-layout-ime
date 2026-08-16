@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "matteo.keyboard-layout",
+  "name": "Keyboard layout + IME",
+  "version": "1.1.0",
+  "author": "Matteo Mangoni",
+  "description": "Current xkb layout; click cycles through layouts and Japanese (fcitx5/Mozc)",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "KeyboardLayout.qml"
+  },
+  "barWidget": {
+    "displayName": "Keyboard layout + IME",
+    "description": "Current xkb layout; click cycles through layouts and Japanese (fcitx5/Mozc)",
+    "category": "Compositor",
+    "allowMultiple": false
+  },
+  "omarchy": {
+    "clonedFrom": "omarchy.keyboard-layout"
+  }
+}
