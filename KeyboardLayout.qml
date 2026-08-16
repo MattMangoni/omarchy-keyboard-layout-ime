@@ -13,6 +13,9 @@ BarWidget {
   // Japanese rides fcitx5's Mozc engine rather than xkb, so the click cycle
   // appends it after the last xkb layout: us(intl) -> it -> mozc -> us(intl).
   // fcitx5-remote drives and reads that leg; Ctrl+Space still works beside it.
+  // Without Mozc in the fcitx5 profile the leg is skipped and the widget
+  // behaves exactly like the stock one, so a missing install degrades quietly.
+  property bool imeAvailable: false
   property bool imeActive: false
   property int layoutTotal: 0
   property int layoutIndex: 0
@@ -86,7 +89,7 @@ BarWidget {
       root.bar.run("fcitx5-remote -s keyboard-us")
       if (root.keyboardName) root.bar.run("hyprctl switchxkblayout " + Util.shellQuote(root.keyboardName) + " 0")
       root.imeActive = false
-    } else if (root.layoutTotal > 1 && root.layoutIndex >= root.layoutTotal - 1) {
+    } else if (root.imeAvailable && root.layoutTotal > 1 && root.layoutIndex >= root.layoutTotal - 1) {
       // Past the last xkb layout the next stop is Japanese. The xkb layer is
       // left alone; Mozc's virtual keyboard speaks over it.
       root.bar.run("fcitx5-remote -s mozc")
@@ -101,6 +104,7 @@ BarWidget {
 
   Component.onCompleted: {
     briefsProc.running = true
+    imeCheckProc.running = true
     refresh()
   }
 
@@ -197,6 +201,18 @@ BarWidget {
     onTriggered: root.refresh()
   }
 
+  // Whether Mozc is in the fcitx5 profile decides whether the Japanese leg
+  // exists at all. fcitx5-remote -s on an engine the profile lacks is a silent
+  // no-op, so without this check a click past the last layout would flash JA
+  // and snap back once the poll reads the truth. The periodic timer keeps
+  // re-checking while unavailable, so installing Mozc mid-session is picked up
+  // without a shell restart.
+  Process {
+    id: imeCheckProc
+    command: ["sh", "-c", "grep -qx 'Name=mozc' \"${XDG_CONFIG_HOME:-$HOME/.config}/fcitx5/profile\""]
+    onExited: function(exitCode) { root.imeAvailable = exitCode === 0 }
+  }
+
   // Ctrl+Space toggles Mozc behind the widget's back, so ask fcitx5 which
   // engine holds the seat. fcitx5-remote is one cheap dbus round trip, so a
   // steady poll costs little; the probe timer confirms a click's optimistic
@@ -213,14 +229,20 @@ BarWidget {
   Timer {
     id: imeProbeTimer
     interval: 700
-    onTriggered: if (!imeProc.running) imeProc.running = true
+    onTriggered: if (root.imeAvailable && !imeProc.running) imeProc.running = true
   }
 
   Timer {
     interval: 2000
     running: true
     repeat: true
-    onTriggered: if (!imeProc.running) imeProc.running = true
+    onTriggered: {
+      if (!root.imeAvailable) {
+        if (!imeCheckProc.running) imeCheckProc.running = true
+      } else if (!imeProc.running) {
+        imeProc.running = true
+      }
+    }
   }
 
   // A query that never returns would freeze the label until the shell restarts,

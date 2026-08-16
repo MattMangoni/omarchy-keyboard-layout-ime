@@ -83,6 +83,13 @@ EN (us intl) → IT → JA (Mozc) → EN → …
    })
    ```
 
+## Missing Mozc?
+
+The widget probes the fcitx5 profile for Mozc. Without it, the Japanese
+stop is skipped and the widget behaves exactly like the stock one — no
+errors, no dead clicks. Add Mozc to the profile (step 2) and the widget
+picks it up within seconds, no restart needed.
+
 ## Chromium and Electron apps
 
 Wayland IME needs a flag there. Add to `~/.config/chromium-flags.conf`
