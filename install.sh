@@ -106,22 +106,12 @@ if [[ -f "$CHROMIUM_FLAGS" ]]; then
   fi
 fi
 
-# 6. Layout advice (your config stays yours) ---------------------------------
+# 6. Layout check (your config stays yours) ----------------------------------
 kb_layout=$(hyprctl getoption input:kb_layout -j 2>/dev/null | grep -o '"str": *"[^"]*"' | cut -d'"' -f4 || true)
 if [[ "$kb_layout" == *,* ]]; then
   skip "Hyprland has multiple layouts ($kb_layout)"
 else
-  warn "Hyprland has a single layout ($kb_layout), so the widget stays hidden."
-  warn "Add layouts in ~/.config/hypr/input.lua, for example:"
-  cat <<'EOF'
-  hl.config({
-    input = {
-      kb_layout = "us,it",
-      kb_variant = "intl,",
-      kb_options = "compose:caps,shift:both_capslock_cancel,grp:alts_toggle",
-    },
-  })
-EOF
+  skip "Hyprland has one layout ($kb_layout); the widget will cycle between it and Japanese"
 fi
 
 say "Done. Click the layout label on the bar to cycle; Ctrl+Space toggles Japanese."

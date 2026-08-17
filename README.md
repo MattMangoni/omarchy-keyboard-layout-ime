@@ -5,7 +5,7 @@ widget cycles through your xkb layouts on click. This fork appends one more
 stop to the cycle: **Japanese via fcitx5/Mozc**.
 
 ```
-EN (us intl) → IT → JA (Mozc) → EN → …
+EN (us intl) → JA (Mozc) → EN → …
 ```
 
 - The label shows the short code of the active layout (`EN`, `IT`, …) or
@@ -35,8 +35,7 @@ git clone https://github.com/MattMangoni/omarchy-keyboard-layout-ime \
 The script is idempotent — re-run it any time; it skips what is already
 done. It installs `fcitx5-mozc`, adds Mozc to the fcitx5 profile,
 registers the widget on the bar, and sets the Chromium IME flags. It does
-not touch your Hyprland layout list; it only prints advice when a single
-layout would keep the widget hidden.
+not touch your Hyprland layout list.
 
 ## Manual install
 
@@ -86,18 +85,8 @@ layout would keep the widget hidden.
    omarchy bar move matteo.keyboard-layout --section right
    ```
 
-5. Give Hyprland more than one xkb layout, or the label has nothing to
-   cycle. In `~/.config/hypr/input.lua`:
-
-   ```lua
-   hl.config({
-     input = {
-       kb_layout = "us,it",
-       kb_variant = "intl,",
-       kb_options = "compose:caps,shift:both_capslock_cancel,grp:alts_toggle",
-     },
-   })
-   ```
+5. Keep one or more xkb layouts in Hyprland. With one layout, the widget
+   cycles directly between that layout and Japanese.
 
 ## Missing Mozc?
 

@@ -11,7 +11,7 @@ BarWidget {
   moduleName: "matteo.keyboard-layout"
 
   // Japanese rides fcitx5's Mozc engine rather than xkb, so the click cycle
-  // appends it after the last xkb layout: us(intl) -> it -> mozc -> us(intl).
+  // appends it after the last xkb layout: us(intl) -> mozc -> us(intl).
   // fcitx5-remote drives and reads that leg; Ctrl+Space still works beside it.
   // Without Mozc in the fcitx5 profile the leg is skipped and the widget
   // behaves exactly like the stock one, so a missing install degrades quietly.
@@ -32,8 +32,8 @@ BarWidget {
   // last reading left that shape in doubt.
   property int keyboardCount: 0
   property bool keyboardUnresolved: false
-  // Nothing to read or switch on the single-layout install most people run, so
-  // the widget ships on the bar and stays out of the way until there are two.
+  // Multiple xkb layouts make the stock layout cycle useful. A configured IME
+  // also makes a single-layout cycle useful, so that case remains visible.
   // An older Hyprland that doesn't report the list keeps showing the label.
   property bool multipleLayouts: true
   // Short language code per layout description ("English (US)": "en"), read from
@@ -89,7 +89,7 @@ BarWidget {
       root.bar.run("fcitx5-remote -s keyboard-us")
       if (root.keyboardName) root.bar.run("hyprctl switchxkblayout " + Util.shellQuote(root.keyboardName) + " 0")
       root.imeActive = false
-    } else if (root.imeAvailable && root.layoutTotal > 1 && root.layoutIndex >= root.layoutTotal - 1) {
+    } else if (root.imeAvailable && root.layoutTotal > 0 && root.layoutIndex >= root.layoutTotal - 1) {
       // Past the last xkb layout the next stop is Japanese. The xkb layer is
       // left alone; Mozc's virtual keyboard speaks over it.
       root.bar.run("fcitx5-remote -s mozc")
@@ -273,7 +273,7 @@ BarWidget {
     onTriggered: root.refresh()
   }
 
-  visible: (layoutLabel !== "" && multipleLayouts) || imeActive
+  visible: (layoutLabel !== "" && (multipleLayouts || imeAvailable)) || imeActive
   implicitWidth: button.implicitWidth
   implicitHeight: button.implicitHeight
 
