@@ -81,9 +81,15 @@ function eventKeyboardName(event) {
 // the seat hands it ends up describing a button. Leave them out and what remains
 // is keyboards, which is what the rest of this file can then assume.
 //
+// Gaming mice and firmware hotkey buttons register keyboard nodes of their own
+// (logitech-g502-...-mouse-keyboard, eee-pc-wmi-hotkeys), and those sit in the
+// middle of the list rather than answering to a fixed prefix. Nobody types on
+// them either, but a click that lands on one switches a device the typed
+// keyboard never follows, so the label changes while the layout does not.
+//
 // Missing a name here costs the accuracy the seat had before, never a keyboard:
 // anything unrecognised stays in the list.
-var UNTYPED_KEYBOARDS = /^(hl-virtual-keyboard|power-button|sleep-button|lid-switch|video-bus)/
+var UNTYPED_KEYBOARDS = /^(hl-virtual-keyboard|power-button|sleep-button|lid-switch|video-bus)|mouse|hotkeys/
 
 function isTypedKeyboard(name) {
   return !UNTYPED_KEYBOARDS.test(String(name || ""))
