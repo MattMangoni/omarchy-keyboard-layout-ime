@@ -34,8 +34,9 @@ git clone https://github.com/MattMangoni/omarchy-keyboard-layout-ime \
 
 The script is idempotent — re-run it any time; it skips what is already
 done. It installs `fcitx5-mozc`, adds Mozc to the fcitx5 profile,
-registers the widget on the bar, and sets the Chromium IME flags. It does
-not touch your Hyprland layout list.
+routes D-Bus activation through Omarchy's managed Fcitx5 service, registers
+the widget on the bar, and sets the Chromium IME flags. It does not touch your
+Hyprland layout list.
 
 ## Manual install
 

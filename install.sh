@@ -11,6 +11,7 @@ REPO_URL="https://github.com/MattMangoni/omarchy-keyboard-layout-ime"
 FCITX5_PROFILE="${XDG_CONFIG_HOME:-$HOME/.config}/fcitx5/profile"
 SHELL_JSON="${XDG_CONFIG_HOME:-$HOME/.config}/omarchy/shell.json"
 CHROMIUM_FLAGS="${XDG_CONFIG_HOME:-$HOME/.config}/chromium-flags.conf"
+FCITX5_DBUS_SERVICE="${XDG_DATA_HOME:-$HOME/.local/share}/dbus-1/services/org.fcitx.Fcitx5.service"
 
 say()  { printf '\033[1;34m==>\033[0m %s\n' "$*"; }
 skip() { printf '\033[1;32m ok\033[0m %s\n' "$*"; }
@@ -25,6 +26,17 @@ else
   say "Installing fcitx5-mozc (may ask for your password)"
   omarchy pkg add fcitx5-mozc
 fi
+
+# Keep fcitx5-remote from D-Bus-activating an unmanaged second instance while
+# the Omarchy service is starting or restarting.
+say "Routing Fcitx5 D-Bus activation through the Omarchy service"
+mkdir -p "$(dirname "$FCITX5_DBUS_SERVICE")"
+cat > "$FCITX5_DBUS_SERVICE" <<'EOF'
+[D-BUS Service]
+Name=org.fcitx.Fcitx5
+Exec=/usr/bin/systemctl --user start omarchy-fcitx5.service
+SystemdService=omarchy-fcitx5.service
+EOF
 
 # 2. Mozc in the fcitx5 profile ---------------------------------------------
 if [[ -f "$FCITX5_PROFILE" ]] && grep -qx 'Name=mozc' "$FCITX5_PROFILE"; then
