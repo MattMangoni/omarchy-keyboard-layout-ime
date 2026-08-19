@@ -8,7 +8,7 @@ import "KeyboardLayoutModel.js" as KeyboardLayoutModel
 
 BarWidget {
   id: root
-  moduleName: "matteo.keyboard-layout"
+  moduleName: "mttmng.keyboard-layout"
 
   // Japanese rides fcitx5's Mozc engine rather than xkb, so the click cycle
   // appends it after the last xkb layout: us(intl) -> mozc -> us(intl).

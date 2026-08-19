@@ -28,8 +28,8 @@ One command, run from a terminal (it may ask for your password):
 
 ```bash
 git clone https://github.com/MattMangoni/omarchy-keyboard-layout-ime \
-  ~/.config/omarchy/plugins/matteo.keyboard-layout \
-  && bash ~/.config/omarchy/plugins/matteo.keyboard-layout/install.sh
+  ~/.config/omarchy/plugins/mttmng.keyboard-layout \
+  && bash ~/.config/omarchy/plugins/mttmng.keyboard-layout/install.sh
 ```
 
 The script is idempotent — re-run it any time; it skips what is already
@@ -74,16 +74,16 @@ Hyprland layout list.
 
    ```bash
    git clone https://github.com/MattMangoni/omarchy-keyboard-layout-ime \
-     ~/.config/omarchy/plugins/matteo.keyboard-layout
+     ~/.config/omarchy/plugins/mttmng.keyboard-layout
    ```
 
 4. Register and place the widget:
 
    ```bash
    omarchy-shell shell rescanPlugins
-   omarchy plugin enable matteo.keyboard-layout
+   omarchy plugin enable mttmng.keyboard-layout
    omarchy plugin disable omarchy.keyboard-layout
-   omarchy bar move matteo.keyboard-layout --section right
+   omarchy bar move mttmng.keyboard-layout --section right
    ```
 
 5. Keep one or more xkb layouts in Hyprland. With one layout, the widget

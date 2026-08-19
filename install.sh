@@ -5,7 +5,7 @@
 #   bash install.sh
 set -euo pipefail
 
-PLUGIN_ID="matteo.keyboard-layout"
+PLUGIN_ID="mttmng.keyboard-layout"
 PLUGIN_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/omarchy/plugins/$PLUGIN_ID"
 REPO_URL="https://github.com/MattMangoni/omarchy-keyboard-layout-ime"
 FCITX5_PROFILE="${XDG_CONFIG_HOME:-$HOME/.config}/fcitx5/profile"
